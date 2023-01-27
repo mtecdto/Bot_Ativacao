@@ -1,0 +1,12 @@
+create database dto_keys;
+
+create table dto_keys.general_keys (
+	idkey int(11) NOT NULL auto_increment,
+    keycontent varchar(29) NOT NULL,
+    serialcontent varchar(30) NOT NULL,
+    keystate int(1) NOT NULL,
+    bancada varchar(2) NOT NULL,
+    disco int(5) not null,
+    memoria int(255) not null,
+    primary key (idkey)
+);
