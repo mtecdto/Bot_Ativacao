@@ -6,7 +6,7 @@ Get-Module SimplySql
 $password=ConvertTo-SecureString "dtopassb1" -AsPlainText -Force
 $cred=New-Object System.Management.Automation.PSCredential("dtouserb1",$password)
 
-Open-MySqlConnection -server "30.0.0.2" -database "dto_keys" -Credential ($cred)
+Open-MySqlConnection -server "172.16.114.78" -database "dto_keys" -Credential ($cred)
 
 
 #..................................................................................................................
@@ -39,7 +39,9 @@ function deletaArquivos{
     Remove-Item C:\Windows\System32\b6popo.ps1
     Remove-Item C:\Windows\System32\b7popo.ps1
     Remove-Item C:\Windows\System32\b8popo.ps1
+    Remove-Item C:\Windows\System32\devpopo.ps1
     Remove-Item C:\Windows\System32\removedor.ps1
+    Remove-Item C:\Windows\System32\popoExecuter.ps1
     Set-ExecutionPolicy Restricted
     Stop-Computer
 }

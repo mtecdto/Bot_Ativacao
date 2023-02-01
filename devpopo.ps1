@@ -4,7 +4,7 @@ Import-Module SimplySql
 Get-Module SimplySql
 
 $password=ConvertTo-SecureString "dtopassb1" -AsPlainText -Force
-$cred=New-Object System.Management.Automation.PSCredential("dtouserb7",$password)
+$cred=New-Object System.Management.Automation.PSCredential("dtodeveloper",$password)
 
 Open-MySqlConnection -server "172.16.114.78" -database "dto_keys" -Credential ($cred)
 
@@ -44,6 +44,7 @@ function deletaArquivos{
     Remove-Item C:\Windows\System32\popoExecuter.ps1
     Set-ExecutionPolicy Restricted
     Stop-Computer
+
 }
 
 function setup {
@@ -102,7 +103,7 @@ function getKeyDb {
 #FUNCAO QUE MUDA O STATUS DA CHAVE PARA CHAVE EM USO
 function setStateUsing {
 
-    Invoke-SqlUpdate "UPDATE general_keys SET keystate=1,bancada='b7' WHERE idkey=$idkey;"
+    Invoke-SqlUpdate "UPDATE general_keys SET keystate=1,bancada='dev' WHERE idkey=$idkey;"
 
 }
 
