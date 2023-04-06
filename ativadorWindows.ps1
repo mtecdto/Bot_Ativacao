@@ -23,8 +23,11 @@ function setStateForBloqued{
   
     Invoke-SqlUpdate "CALL bloquedKey($idkey);";
 
-    #$logUninstallKey = cscript slmgr.vbs /upk;
-    #Write-Host "MENSAGEM DESINSTALACAO CHAVE: " $logUninstallKey;
+    $logUninstallKey = cscript slmgr.vbs /upk;
+    Write-Host "MENSAGEM DESINSTALACAO CHAVE UPK: " $logUninstallKey;
+
+    $logRemoveCache = cscript slmgr.vbs /cpky;
+    Write-Host "MENSAGEM LIMPEZA REGISTROS CPKY: " $logRemoveCache;
 
 }
 
@@ -108,7 +111,7 @@ function activation{
 
         #Código de instalação da chave na máquina. 
         $logVbsIpk = cscript slmgr.vbs /ipk $keycont;
-        Write-Host "MENSAGEM DE INSTALACAO: $logVbsIpk" -ForegroundColor Yellow`n;
+        Write-Host "MENSAGEM DE INSTALACAO IPK: $logVbsIpk" -ForegroundColor Yellow`n;
 
         #Estrutura de condição if que verifica se a chave do windows foi instalado com sucesso.
         if($logVbsIpk | sls "instalada com êxito."){
@@ -118,11 +121,13 @@ function activation{
         }else {
 
             $i= 0,(Write-Host "Invalid Product Key"`n -ForegroundColor red);
+            setStateForBloqued;
+            break :loop;
 
         }
 
         $logVbsAto = cscript slmgr.vbs /ato;
-        Write-Host "MENSAGEM DE ATIVACAO: $logVbsAto" -ForegroundColor Yellow`n;
+        Write-Host "MENSAGEM DE ATIVACAO ATO: $logVbsAto" -ForegroundColor Yellow`n;
 
         #Estrutura que verifica se a máquina está ativada.
         for ($i = 0; $i -ne 1) {
@@ -150,5 +155,8 @@ function activation{
 }
 
 activation;
+
+$chaveAtual = (Get-WmiObject -query 'select * from SoftwareLicensingService').OA3xOriginalProductKey;
+Write-Host "CHAVE INSTALADA NA MAQUINA: $chaveAtual" -ForegroundColor Blue`n;
 
 Close-SqlConnection;
