@@ -3,10 +3,10 @@
 Import-Module SimplySql
 Get-Module SimplySql
 
-$password=ConvertTo-SecureString "dtopassb1" -AsPlainText -Force
-$cred=New-Object System.Management.Automation.PSCredential("dtouserb1",$password)
+$password=ConvertTo-SecureString "labmtec2022" -AsPlainText -Force
+$cred=New-Object System.Management.Automation.PSCredential("root",$password)
 
-Open-MySqlConnection -server "172.16.114.78" -database "dto_keys" -Credential ($cred)
+Open-MySqlConnection -server "127.0.0.1" -database "dto_keys" -Credential ($cred)
 
 
 #..................................................................................................................
@@ -41,48 +41,21 @@ function deletaArquivos{
     Remove-Item C:\Windows\System32\b8popo.ps1
     Remove-Item C:\Windows\System32\devpopo.ps1
     Remove-Item C:\Windows\System32\removedor.ps1
-    Remove-Item C:\Windows\System32\popoExecuter.ps1
+    #Remove-Item C:\Windows\System32\popoExecuter.ps1
     Set-ExecutionPolicy Restricted
     Stop-Computer
-}
-
-function setup {
-    
-    $memoria = wmic computersystem get totalphysicalmemory
-    $memoria0 = [math]::truncate($memoria[2] / 0.95GB)
-    $totalMemoria = $memoria0 -as [int]
-
-    $disk = Get-WmiObject Win32_LogicalDisk -Filter "DeviceID='C:'" | Select-Object Size, FreeSpace
-    $ddc = [math]::truncate($disk.Size / 1GB)
-    $ddc
-
-    $disk = Get-WmiObject Win32_LogicalDisk -Filter "DeviceID='D:'" | Select-Object Size, FreeSpace
-    $ddd = [math]::truncate($disk.Size / 1GB)
-    $ddd 
-
-    $disk = Get-WmiObject Win32_LogicalDisk -Filter "DeviceID='E:'" | Select-Object Size, FreeSpace
-    $dde = [math]::truncate($disk.Size / 1GB)
-    $dde
-
-    $disk = Get-WmiObject Win32_LogicalDisk -Filter "DeviceID='F:'" | Select-Object Size, FreeSpace
-    $ddf = [math]::truncate($disk.Size / 1GB)
-    $ddf
-        
-    $disk = Get-WmiObject Win32_LogicalDisk -Filter "DeviceID='G:'" | Select-Object Size, FreeSpace
-    $ddg = [math]::truncate($disk.Size / 1GB)
-    $ddg
-
-    $totalDisco = $ddc + $ddd + $dde +$ddf + $ddg
-
-    Invoke-SqlUpdate "UPDATE general_keys SET memoria=$totalMemoria,disco=$totalDisco where idkey=$idkey;"
-
-    deletaArquivos
-
 }
 
 
 #FUNCAO PARA PEGAR UMA NOVA CHAVE NO BANCO
 function getKeyDb {
+
+    ipconfig /flushdns
+    $logUninstallKey = cscript slmgr.vbs /upk
+    $logUninstallKey
+
+    $excluirChave = cscript slmgr /cpky
+    $excluirChave
     
     $requisitionResult = Invoke-SqlQuery "SELECT idkey,keycontent FROM general_keys WHERE keystate=0 LIMIT 1;";
     
@@ -126,12 +99,43 @@ function setStateForActived{
    
     Write-Host "ATIVADA"
     
+    #Serialnumber
+
     $array = @(wmic bios get serialnumber)
     $serialnumber = $array[2]
 
-    Invoke-SqlUpdate "UPDATE general_keys SET serialcontent='$serialnumber',keystate=3 WHERE idkey=$idkey;"
+    #Hardware
 
-    setup
+    $memoria = wmic computersystem get totalphysicalmemory
+    $memoria0 = [math]::truncate($memoria[2] / 0.95GB)
+    $totalMemoria = $memoria0 -as [int]
+
+    $disk = Get-WmiObject Win32_LogicalDisk -Filter "DeviceID='C:'" | Select-Object Size, FreeSpace
+    $ddc = [math]::truncate($disk.Size / 1GB)
+    $ddc
+
+    $disk = Get-WmiObject Win32_LogicalDisk -Filter "DeviceID='D:'" | Select-Object Size, FreeSpace
+    $ddd = [math]::truncate($disk.Size / 1GB)
+    $ddd 
+
+    $disk = Get-WmiObject Win32_LogicalDisk -Filter "DeviceID='E:'" | Select-Object Size, FreeSpace
+    $dde = [math]::truncate($disk.Size / 1GB)
+    $dde
+
+    $disk = Get-WmiObject Win32_LogicalDisk -Filter "DeviceID='F:'" | Select-Object Size, FreeSpace
+    $ddf = [math]::truncate($disk.Size / 1GB)
+    $ddf
+        
+    $disk = Get-WmiObject Win32_LogicalDisk -Filter "DeviceID='G:'" | Select-Object Size, FreeSpace
+    $ddg = [math]::truncate($disk.Size / 1GB)
+    $ddg
+
+    $totalDisco = $ddc + $ddd + $dde +$ddf + $ddg
+
+
+    Invoke-SqlUpdate "UPDATE general_keys SET serialcontent='$serialnumber',keystate=3,memoria=$totalMemoria,disco=$totalDisco WHERE idkey=$idkey;"
+
+    #deletaArquivos
 
 }
 
@@ -140,7 +144,10 @@ function setStateForActived{
 
 
 function ativation {
+
     ipconfig /flushdns
+    $logUninstallKey = cscript slmgr.vbs /upk
+    $logUninstallKey
 
     Write-Host "------------------TUPINAMPAI------------------" -ForegroundColor DarkYellow`n
     ##**===========================================================================================================================
@@ -195,7 +202,5 @@ function ativation {
 
     }
 }
-
-
 
 ativation
