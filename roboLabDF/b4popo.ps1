@@ -8,7 +8,7 @@ function conexaoBD{
     Get-Module SimplySql;
 
     $password=ConvertTo-SecureString "dtopassb1" -AsPlainText -Force;
-    $cred=New-Object System.Management.Automation.PSCredential("root",$password);
+    $cred=New-Object System.Management.Automation.PSCredential("dtouserb4",$password);
 
     Open-MySqlConnection -server "172.16.114.76" -database "dto_keys" -Credential ($cred);
 
@@ -90,7 +90,7 @@ function setStateForActived{
 #FUNCAO PARA PEGAR UMA NOVA CHAVE NO BANCO
 function getKeyDb {
     
-    $requisitionResult = Invoke-SqlQuery "CALL getKey('b9');";
+    $requisitionResult = Invoke-SqlQuery "CALL getKey('b4');";
     
     if ($requisitionResult -eq $null){
 
