@@ -7,14 +7,29 @@ function conexaoBD{
     Import-Module SimplySql;
     Get-Module SimplySql;
 
-    $password=ConvertTo-SecureString "labmtec2022" -AsPlainText -Force;
+    $password=ConvertTo-SecureString "dtopassb1" -AsPlainText -Force;
     $cred=New-Object System.Management.Automation.PSCredential("root",$password);
 
-    Open-MySqlConnection -server "127.0.0.1" -database "dto_keys" -Credential ($cred);
+    Open-MySqlConnection -server "172.16.114.76" -database "dto_keys" -Credential ($cred);
 
 }
 
 conexaoBD;
+
+function deletaArquivos{
+
+    Remove-Item C:\Windows\System32\b1popo.ps1
+    Remove-Item C:\Windows\System32\b2popo.ps1
+    Remove-Item C:\Windows\System32\b3popo.ps1
+    Remove-Item C:\Windows\System32\b4popo.ps1
+    Remove-Item C:\Windows\System32\b5popo.ps1
+    Remove-Item C:\Windows\System32\b6popo.ps1
+    Remove-Item C:\Windows\System32\b7popo.ps1
+    Remove-Item C:\Windows\System32\b8popo.ps1
+    Remove-Item C:\Windows\System32\removedor.ps1
+    Set-ExecutionPolicy Restricted
+    #Stop-Computer
+}
 
 #Funcao que muda status para bloqueada
 function setStateForBloqued{
@@ -66,7 +81,9 @@ function setStateForActived{
 
     Invoke-SqlUpdate "CALL activedKey($idkey,'$serialnumber',$totalDisco,$totalMemoria);";
 
-    #deletaArquivos
+    sleep(2);
+
+    deletaArquivos;
 
 }
 
@@ -109,9 +126,16 @@ function activation{
         Write-Host "ID Key: $idkey";
         Write-Host "Product Key: $keycont";
 
+        sleep(3);
+
         #Código de instalação da chave na máquina. 
         $logVbsIpk = cscript slmgr.vbs /ipk $keycont;
-        Write-Host "MENSAGEM DE INSTALACAO IPK: $logVbsIpk" -ForegroundColor Yellow`n;
+        Write-Host "PRIMEIRA TENTATIVA DE INSTALACAO IPK: $logVbsIpk" -ForegroundColor Yellow`n;
+
+        sleep(3);
+
+        $logVbsIpk = cscript slmgr.vbs /ipk $keycont;
+        Write-Host "SEGUNDA TENTATIVA DE INSTALACAO IPK: $logVbsIpk" -ForegroundColor DarkYellow`n;
 
         #Estrutura de condição if que verifica se a chave do windows foi instalado com sucesso.
         if($logVbsIpk | sls "instalada com êxito."){
@@ -126,6 +150,8 @@ function activation{
 
         }
 
+        sleep(3);
+
         $logVbsAto = cscript slmgr.vbs /ato;
         Write-Host "MENSAGEM DE ATIVACAO ATO: $logVbsAto" -ForegroundColor Yellow`n;
 
@@ -138,12 +164,12 @@ function activation{
                 
                 setStateForActived;
                 $i = 1;
-                Write-Host "O Windows está ativado." -ForegroundColor green`n;
+                Write-Host "Windows ativado." -ForegroundColor green`n;
 
             } else {
 
                 setStateForBloqued;
-                Write-Host "O Windows não está ativado." -ForegroundColor red`n;
+                Write-Host "Windows não ativado." -ForegroundColor red`n;
                 break :loop;
 
             }
