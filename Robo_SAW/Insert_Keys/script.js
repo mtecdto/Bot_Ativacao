@@ -8,6 +8,8 @@ const cmdSqlFinal = ";";
 const shapeInicial = "(default,'";
 const shapeFinal = "','',0,'',0,0)";
 
+let cmdSqlToCopy = "";
+
 /*........*/
 
 let shapeAux = "";
@@ -37,6 +39,13 @@ function generateBtn(){
     concatenaShapeChave(vetKeys);
 
     const cmdSqlCompleto = `${cmdSqlInicial}${shapeAux}${cmdSqlFinal}`;
+    cmdSqlToCopy = cmdSqlCompleto;
     outputView.innerText = `${cmdSqlCompleto}`;
 }
 
+async function clipboardCopyBtn(){
+
+    await navigator.clipboard.writeText(cmdSqlToCopy);
+    alert('Copiado para área de transferência');
+
+}

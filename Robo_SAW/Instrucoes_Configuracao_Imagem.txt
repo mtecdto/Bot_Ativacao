@@ -1,0 +1,26 @@
+		*******************************************************************************
+		***PASSO A PASSO PARA REALIZAR A IMAGEM COM O SCRIPT DE ATIVAÇÃO DO WINDOWS.***
+		*******************************************************************************
+		   
+		
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+###Comandos###
+Abrir o PowerShell como administrador e executar os seguintes comandos: Set-ExecutionPolicy bypass e Install-Module SimplySQL.
+Para a conexão com o banco
+
+#Comando para habilitar a execução de scripts no windows.
+Set-ExecutionPolicy bypass
+
+#Comando para instalar o SQL no windows.
+Install-Module SimplySQL
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Para funcionamento do programa o PowerShell deve ser excutado como adiministrador. Para que essa execução aconteça por padrão siga os passos:
+- No ícone do PowerShell clicar com o botão direito do mouse e abrir o local de arquivo;
+- Na pasta que abrir, clicar novamente com o botão direito do mouse no ícone do PowerShell e ir em "Propriedades";
+- Dentro das propriedades ir na aba "Atalho" e clicar em "Avançados...";
+- Nas propriedades avançadas marcar a caixa "Executar como administrador" e clicar em OK;
+- Ao final basta clicar em "Aplicar" e assim a imagem terá a execução do PowerShell como adiministrador por padrão.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Colocar o script no seguinte diretório:
+C:\Windows\System32
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------

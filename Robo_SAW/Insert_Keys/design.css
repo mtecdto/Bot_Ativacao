@@ -10,26 +10,30 @@
     flex-direction: column;
 }
 
-.contInput{
+.container .contInput{
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-direction: column;
-    height: 100px;
 }
 
 .chavesInput{
     width: 250px;
     height: 30px;
-    margin-top: 20px;
     padding-left: 5px;
     border-color: #E26200;
     border: 0.5;
     border-radius: 5px;
+    margin-top: 30px;
+}
+
+.container .contInput .contBtn{
+    display: flex;
+    flex-direction: column;
 }
 
 .btnGerar{
     margin-top: 10px;
+    margin-bottom: 10px;
     width: 250px;
     height: 30px;
     border: 0;
@@ -38,12 +42,27 @@
     background-color: #E26200;
 }
 
+.copiarBtn{
+    width: 250px;
+    height: 30px;
+    border: 0;
+    border-radius: 10px;
+    color: #ffffff;
+    background-color: rgb(28, 104, 151);
+}
+
 .btnGerar:hover{
     cursor: pointer;
     background-color: #077519;
 }
 
-.contOutput{
+.copiarBtn:hover{
+    cursor: pointer;
+    background-color: rgb(101, 145, 172);;
+}
+
+
+.container .contOutput{
     display: flex;
     justify-content: center;
 }
