@@ -187,4 +187,4 @@ Write-Host "CHAVE INSTALADA NA MAQUINA: $chaveAtual" -ForegroundColor Blue`n;
 
 Close-SqlConnection;
 
-Stop-Computer
+
