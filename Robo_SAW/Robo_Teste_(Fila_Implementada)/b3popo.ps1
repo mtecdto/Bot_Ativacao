@@ -28,7 +28,7 @@ function deletaArquivos{
     Remove-Item C:\Windows\System32\b8popo.ps1
     Remove-Item C:\Windows\System32\removedor.ps1
     Set-ExecutionPolicy Restricted
-    #Stop-Computer
+    Stop-Computer
 }
 
 #Funcao que muda status para bloqueada
@@ -186,5 +186,3 @@ $chaveAtual = (Get-WmiObject -query 'select * from SoftwareLicensingService').OA
 Write-Host "CHAVE INSTALADA NA MAQUINA: $chaveAtual" -ForegroundColor Blue`n;
 
 Close-SqlConnection;
-
-Stop-Computer
